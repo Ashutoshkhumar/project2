@@ -1,0 +1,372 @@
+
+/* ==============================
+   1. Global Styles
+================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(
+        135deg,
+        #0f172a 0%,
+        #1e1b4b 50%,
+        #0f172a 100%
+    );
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid #60a5fa;
+    outline-offset: 2px;
+}
+
+/* ==============================
+   2. Glassmorphism Panels
+================================= */
+
+.glass-panel {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-input {
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #e2e8f0;
+    width: 100%;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.glass-input::placeholder {
+    color: #64748b;
+}
+
+.glass-input:focus {
+    border-color: #3b82f6;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+}
+
+select option {
+    background: #0f172a;
+    color: #e2e8f0;
+}
+
+/* ==============================
+   3. Navigation Tabs
+================================= */
+
+.nav-tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    color: #cbd5e1;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.nav-tab:hover {
+    background: rgba(51, 65, 85, 0.7);
+    color: white;
+}
+
+.nav-tab.active {
+    background: #2563eb;
+    color: white;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+}
+
+/* ==============================
+   4. Buttons
+================================= */
+
+.small-btn {
+    padding: 8px 12px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.small-btn:hover {
+    background: #334155;
+    border-color: #475569;
+}
+
+.small-btn.danger {
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+.small-btn.danger:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.primary-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 13px 20px;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    background: linear-gradient(90deg, #2563eb, #4f46e5);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+    transition: all 0.2s ease;
+}
+
+.primary-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.35);
+}
+
+/* ==============================
+   5. Analysis Score Cards
+================================= */
+
+.stat-label {
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.stat-value {
+    color: white;
+    font-size: 30px;
+    font-weight: 800;
+    margin-top: 8px;
+}
+
+/* ==============================
+   6. Charts
+================================= */
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 260px;
+}
+
+/* ==============================
+   7. Skill Tags
+================================= */
+
+.skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-height: 60px;
+    align-content: flex-start;
+    padding: 12px;
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+}
+
+.skill-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border: 1px solid;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.skill-tag.matched {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #6ee7b7;
+}
+
+.skill-tag.missing {
+    background: rgba(244, 63, 94, 0.12);
+    border-color: rgba(244, 63, 94, 0.3);
+    color: #fda4af;
+}
+
+.muted-message {
+    color: #94a3b8;
+    font-size: 13px;
+    font-style: italic;
+}
+
+/* ==============================
+   8. Skill Bank Cards
+================================= */
+
+.skill-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px;
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(100, 116, 139, 0.35);
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.skill-card:hover {
+    border-color: rgba(59, 130, 246, 0.7);
+    transform: translateY(-2px);
+}
+
+.skill-card .skill-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1e293b;
+    border-radius: 10px;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.skill-card h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+}
+
+.skill-card p {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 4px;
+}
+
+.add-skill-btn {
+    padding: 8px 10px;
+    border-radius: 8px;
+    color: #93c5fd;
+    background: rgba(37, 99, 235, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.add-skill-btn:hover {
+    background: rgba(37, 99, 235, 0.3);
+}
+
+/* ==============================
+   9. Career Recommendations
+================================= */
+
+.recommendation-card {
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid #334155;
+}
+
+.recommendation-card h4 {
+    color: white;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.recommendation-card ul {
+    list-style: disc;
+    padding-left: 20px;
+    color: #cbd5e1;
+    font-size: 14px;
+}
+
+.recommendation-card li {
+    margin-bottom: 8px;
+}
+
+.empty-state {
+    padding: 40px 20px;
+    text-align: center;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    background: rgba(15, 23, 42, 0.6);
+    color: #94a3b8;
+}
+
+.empty-state i {
+    color: #64748b;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ==============================
+   10. Custom Scrollbar
+================================= */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(100, 116, 139, 0.5);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.8);
+}
+
+/* ==============================
+   11. Responsive Design
+================================= */
+
+@media (max-width: 640px) {
+    .nav-tab {
+        padding: 9px 10px;
+        font-size: 12px;
+        gap: 5px;
+    }
+
+    .stat-value {
+        font-size: 26px;
+    }
+
+    .chart-container {
+        height: 230px;
+    }
+
+    .small-btn {
+        padding: 8px 10px;
+    }
+}

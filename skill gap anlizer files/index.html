@@ -1,0 +1,314 @@
+
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SkillGap Pro - Job Skill Gap Analyzer</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            500: '#3b82f6',
+                            600: '#2563eb'
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+
+    <!-- Our CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="text-slate-200 antialiased pb-12">
+
+    <!-- Navbar -->
+    <header class="sticky top-0 z-50 glass-panel mb-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+
+                <div class="flex items-center gap-3">
+                    <div class="p-2.5 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl">
+                        <i class="fa-solid fa-chart-pie text-xl text-white"></i>
+                    </div>
+
+                    <div>
+                        <div class="text-xl font-bold text-white">
+                            SkillGap <span class="text-blue-400">Pro</span>
+                        </div>
+                        <p class="text-xs text-slate-400 hidden sm:block">
+                            Job Matcher & Skill Gap Analyzer
+                        </p>
+                    </div>
+                </div>
+
+                <nav class="flex gap-2">
+                    <button onclick="switchTab('analyzer')" id="tab-btn-analyzer"
+                        class="nav-tab active">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span class="hidden md:inline">Analyzer</span>
+                    </button>
+
+                    <button onclick="switchTab('skillbank')" id="tab-btn-skillbank"
+                        class="nav-tab">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span class="hidden md:inline">Skill Bank</span>
+                    </button>
+
+                    <button onclick="switchTab('career')" id="tab-btn-career"
+                        class="nav-tab">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <span class="hidden md:inline">Career Prep</span>
+                    </button>
+                </nav>
+
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+
+        <!-- TAB 1: ANALYZER -->
+        <section id="tab-analyzer" class="tab-content space-y-6">
+
+            <!-- Quick presets -->
+            <div class="glass-panel p-4 rounded-xl flex flex-wrap items-center justify-between gap-3">
+                <span class="text-sm font-medium">
+                    <i class="fa-solid fa-bolt text-yellow-400"></i>
+                    Quick Fill Sample Job Roles:
+                </span>
+
+                <div class="flex flex-wrap gap-2">
+                    <button class="small-btn" onclick="loadPreset('data-analyst')">
+                        Data Analyst
+                    </button>
+
+                    <button class="small-btn" onclick="loadPreset('web-dev')">
+                        Web Developer
+                    </button>
+
+                    <button class="small-btn" onclick="loadPreset('ai-engineer')">
+                        AI/ML Engineer
+                    </button>
+
+                    <button class="small-btn" onclick="loadPreset('devops')">
+                        DevOps Specialist
+                    </button>
+
+                    <button class="small-btn danger" onclick="clearAllInputs()">
+                        <i class="fa-solid fa-trash-can"></i> Clear
+                    </button>
+                </div>
+            </div>
+
+            <!-- Input forms -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                <div class="glass-panel p-5 rounded-2xl">
+                    <div class="flex justify-between items-center mb-3">
+                        <label for="job-description" class="font-semibold text-white">
+                            <i class="fa-solid fa-briefcase text-blue-400"></i>
+                            Job Description
+                        </label>
+                        <span id="jd-char-count" class="text-xs text-slate-400">
+                            0 chars
+                        </span>
+                    </div>
+
+                    <textarea id="job-description" rows="8"
+                        placeholder="Paste the job description here..."
+                        class="glass-input w-full p-4 rounded-xl resize-y"></textarea>
+
+                    <p class="text-xs text-slate-400 mt-3">
+                        <i class="fa-solid fa-circle-info text-blue-400"></i>
+                        Skills will be extracted from the job description.
+                    </p>
+                </div>
+
+                <div class="glass-panel p-5 rounded-2xl">
+                    <div class="flex justify-between items-center mb-3">
+                        <label for="user-skills" class="font-semibold text-white">
+                            <i class="fa-solid fa-user-gear text-indigo-400"></i>
+                            Your Skills / Resume
+                        </label>
+                        <span id="skills-count" class="text-xs text-slate-400">
+                            0 skills listed
+                        </span>
+                    </div>
+
+                    <textarea id="user-skills" rows="8"
+                        placeholder="Python, SQL, Excel, Pandas, Communication..."
+                        class="glass-input w-full p-4 rounded-xl resize-y"></textarea>
+
+                    <button onclick="analyzeSkillGap()" class="primary-btn w-full mt-4">
+                        <i class="fa-solid fa-magnifying-glass-chart"></i>
+                        Run Skill Gap Analysis
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Analysis results -->
+            <div id="results-container" class="hidden space-y-6">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+                    <div class="glass-panel p-5 rounded-2xl border-l-4 border-blue-500">
+                        <p class="stat-label">Overall Match Score</p>
+                        <p id="match-score-text" class="stat-value">0%</p>
+                    </div>
+
+                    <div class="glass-panel p-5 rounded-2xl border-l-4 border-emerald-500">
+                        <p class="stat-label">Skills Matched</p>
+                        <p id="matched-count-text" class="stat-value text-emerald-400">0</p>
+                    </div>
+
+                    <div class="glass-panel p-5 rounded-2xl border-l-4 border-rose-500">
+                        <p class="stat-label">Missing Skills</p>
+                        <p id="missing-count-text" class="stat-value text-rose-400">0</p>
+                    </div>
+
+                    <div class="glass-panel p-5 rounded-2xl border-l-4 border-purple-500">
+                        <p class="stat-label">Readiness Tier</p>
+                        <p id="readiness-tier" class="text-lg font-bold text-purple-300 mt-2">
+                            Calculating...
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <h3 class="text-lg font-semibold text-white mb-4">
+                            <i class="fa-solid fa-chart-pie text-blue-400"></i>
+                            Skill Match Distribution
+                        </h3>
+                        <div class="chart-container">
+                            <canvas id="matchDoughnutChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-2xl">
+                        <h3 class="text-lg font-semibold text-white mb-4">
+                            <i class="fa-solid fa-chart-bar text-indigo-400"></i>
+                            Skill Category Breakdown
+                        </h3>
+                        <div class="chart-container">
+                            <canvas id="skillCategoryChart"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Matched and missing skills -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <div class="glass-panel p-5 rounded-2xl border-t-2 border-emerald-500">
+                        <h4 class="font-semibold text-emerald-400 mb-3">
+                            <i class="fa-solid fa-circle-check"></i>
+                            Skills You Possess
+                        </h4>
+                        <div id="matched-tags" class="skill-tags"></div>
+                    </div>
+
+                    <div class="glass-panel p-5 rounded-2xl border-t-2 border-rose-500">
+                        <h4 class="font-semibold text-rose-400 mb-3">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                            Key Skills Gap
+                        </h4>
+                        <div id="missing-tags" class="skill-tags"></div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: SKILL BANK -->
+        <section id="tab-skillbank" class="tab-content hidden space-y-6">
+            <div class="glass-panel p-6 rounded-2xl">
+
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">Skill Bank Library</h2>
+                        <p class="text-sm text-slate-400">
+                            Explore industry skills, tools and frameworks.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <input id="skill-search" type="text"
+                            oninput="filterSkillBank()"
+                            placeholder="Search skills..."
+                            class="glass-input px-4 py-2 rounded-lg">
+
+                        <select id="skill-category-select"
+                            onchange="filterSkillBank()"
+                            class="glass-input px-3 py-2 rounded-lg">
+                            <option value="all">All Categories</option>
+                            <option value="Programming">Programming</option>
+                            <option value="Web Development">Web Development</option>
+                            <option value="Data & AI">Data & AI</option>
+                            <option value="Cloud & DevOps">Cloud & DevOps</option>
+                            <option value="Soft Skills">Soft Skills</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="skill-bank-grid"
+                    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: CAREER PREP -->
+        <section id="tab-career" class="tab-content hidden space-y-6">
+            <div class="glass-panel p-6 rounded-2xl space-y-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-white">
+                        Career Readiness & Recommendations
+                    </h2>
+                    <p class="text-sm text-slate-400">
+                        Recommendations based on your skill gap analysis.
+                    </p>
+                </div>
+
+                <div id="career-recommendations" class="space-y-4">
+                    <div class="empty-state">
+                        <i class="fa-solid fa-graduation-cap text-4xl mb-3"></i>
+                        <p>
+                            Run a Skill Gap Analysis to unlock learning priorities
+                            and interview preparation tips.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Our JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
